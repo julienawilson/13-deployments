@@ -8,14 +8,15 @@ var express = require('express'),
 // NOTE: now use our proxy within a function to request
 //        our github data on the server.
 var proxyGithub = function(request, response) {
-  console.log('routing GitHub resest for', request.params[0]);
+  console.log('Routing GitHub resest for', request.params[0]);
+  console.log(process.env.GITHUB_TOKEN);
   (requestProxy({
     url: 'https://api.github.com/' + request.params[0],
-    headers:{Authorization: 'token ' + process.env.GITHUB_TOKEN}
-  }));
+    headers:{'Authorization': 'token ' + process.env.GITHUB_TOKEN}
+  }))(request,response);
 };
 
-app.get('/github/*,proxyGithub');
+app.get('/github/*',proxyGithub);
 
 app.use(express.static('./'));
 
